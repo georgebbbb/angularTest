@@ -1,0 +1,116 @@
+<!doctype html />
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title></title>
+    <style type="text/css">
+
+    .drop-panel {
+
+        background-color: #f1f1f1;
+
+
+
+        }
+        .drop-panel-panel {
+            color :red;
+        }
+    </style>
+    
+
+</head>
+<body  ng-app="resume">
+        <div ng-controller="mainCtr">
+           <input type="text" drop-panel />
+
+           <input type='text' ng-model='ctrl.someModel' duplicate="5" />   <br>
+           <input data-ng-repeat="b in a" ng-model="b" >
+
+           <<div ng-include="row.html" scope="" onload="">
+               
+           </div>
+                
+           
+          
+        </div>
+
+
+
+        <script src="node_modules/jquery/dist/jquery.js"></script>
+        <script src="node_modules/angular/angular.js"></script>
+
+
+
+
+        <script type="text/javascript">
+
+            angular.module('resume', [])
+                .controller('mainCtr', function ($scope) {
+                        $scope.a=['1','2','3'];
+                        $scope.c=[]
+
+
+
+                        console.log($scope);
+
+
+
+                }).directive('dropPanel', function ($timeout) { 
+                    return {
+                         transclude: 'element',
+                         replace: true,
+                        templateUrl: 'row.html',
+                        restrict: 'A',
+                     
+                    
+                        link: function (scope, element, attrs) {
+                        				
+                        	
+
+                        }
+                    }
+                }).directive('duplicate', function(){
+  return {
+
+
+
+    transclude: 'element',
+    priority: 1000,
+    link: function(scope, el, attrs, ctrl, transclude){
+      var times = parseInt(attrs.duplicate, 10);
+      var previous = el;
+      var achildScope;
+
+      for(var i = 0; i < times; i += 1){
+        achildScope = scope.$new();
+        achildScope.$index = i;
+       // console.log(achildScope);
+
+        transclude(achildScope, function(clone){
+        //    console.log(clone);
+          el.after(clone);
+          el = clone;
+        });
+      }
+    }
+  }
+});   
+
+
+        </script>
+
+        <script type="text/ng-template" id="waterfall.html">
+ 
+
+                  </script>
+        <script type="text/ng-template" id="row.html">
+     	
+          <div class='drop-panel'>
+  <span ng-transclude></span>
+  <div class='drop-panel-panel'>
+    This is some panel content
+  </div>
+</div> 
+        </script>
+</body>
+</html>
